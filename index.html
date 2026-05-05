@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Equipment Report</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      :root {
+        color-scheme: light;
+        --bg: #f6f7fb;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #475569;
+        --border: #e2e8f0;
+        --focus: #2563eb;
+        --primary: #2563eb;
+        --primary-contrast: #ffffff;
+        --danger: #b91c1c;
+        --success: #15803d;
+        --shadow: 0 12px 28px rgba(2, 6, 23, 0.08);
+        --radius: 14px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          "Noto Sans",
+          "Liberation Sans",
+          sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(
+            1100px 420px at 20% -10%,
+            rgba(37, 99, 235, 0.14),
+            transparent 55%
+          ),
+          radial-gradient(
+            900px 360px at 100% 0%,
+            rgba(14, 165, 233, 0.12),
+            transparent 60%
+          ),
+          var(--bg);
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 28px 16px 56px;
+      }
+
+      header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .title {
+        margin: 0;
+        font-size: 28px;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+      }
+
+      .subtitle {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .panel-section {
+        padding: 18px;
+      }
+
+      .divider {
+        border: 0;
+        border-top: 1px solid var(--border);
+        margin: 0;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        gap: 12px;
+      }
+
+      .field {
+        grid-column: span 12;
+      }
+
+      @media (min-width: 720px) {
+        .field.half {
+          grid-column: span 6;
+        }
+        .field.third {
+          grid-column: span 4;
+        }
+      }
+
+      label {
+        display: block;
+        font-size: 12px;
+        color: var(--muted);
+        margin: 0 0 6px;
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: #fff;
+        color: var(--text);
+        font-size: 14px;
+        outline: none;
+        transition:
+          border-color 150ms ease,
+          box-shadow 150ms ease;
+      }
+
+      textarea {
+        min-height: 86px;
+        resize: vertical;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: rgba(37, 99, 235, 0.55);
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 12px;
+      }
+
+      .btn {
+        appearance: none;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+        border-radius: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 14px;
+        transition:
+          transform 80ms ease,
+          background 150ms ease,
+          border-color 150ms ease,
+          opacity 150ms ease;
+      }
+
+      .btn:hover {
+        background: rgba(15, 23, 42, 0.03);
+      }
+
+      .btn:active {
+        transform: translateY(1px);
+      }
+
+      .btn-primary {
+        border-color: rgba(37, 99, 235, 0.4);
+        background: var(--primary);
+        color: var(--primary-contrast);
+      }
+
+      .btn-primary:hover {
+        background: #1d4ed8;
+      }
+
+      .btn-danger {
+        border-color: rgba(185, 28, 28, 0.35);
+        color: #991b1b;
+        background: rgba(185, 28, 28, 0.06);
+      }
+
+      .btn:disabled {
+        opacity: 0.65;
+        cursor: not-allowed;
+      }
+
+      .equipment-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .equipment-card {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 14px;
+        background: #fff;
+      }
+
+      .equipment-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+
+      .equipment-title {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+
+      .msg {
+        margin: 10px 0 0;
+        font-size: 14px;
+        min-height: 20px;
+      }
+
+      .msg.error {
+        color: var(--danger);
+      }
+
+      .msg.success {
+        color: var(--success);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div>
+          <h1 class="title">Equipment Report</h1>
+          <p class="subtitle">
+            Fill basic details, add equipment items, then submit.
+          </p>
+        </div>
+      </header>
+
+      <main class="panel" role="main">
+        <section class="panel-section" aria-label="Basic details">
+          <div class="grid">
+            <div class="field third">
+              <label for="date">Date</label>
+              <input type="date" id="date" />
+            </div>
+            <div class="field third">
+              <label for="empid">Employee ID</label>
+              <input
+                type="text"
+                id="empid"
+                placeholder="Employee ID"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field third">
+              <label for="empname">Employee Name</label>
+              <input
+                type="text"
+                id="empname"
+                placeholder="Employee Name"
+                autocomplete="name"
+              />
+            </div>
+            <div class="field half">
+              <label for="site">Site Name</label>
+              <input
+                type="text"
+                id="site"
+                placeholder="Site Name"
+                autocomplete="organization"
+              />
+            </div>
+          </div>
+        </section>
+
+        <hr class="divider" />
+
+        <section class="panel-section" aria-label="Equipment items">
+          <div id="equipmentList" class="equipment-list"></div>
+
+          <div class="actions">
+            <button class="btn" type="button" onclick="addItem()">
+              + Add Equipment
+            </button>
+            <button
+              class="btn btn-primary"
+              id="submitBtn"
+              type="button"
+              onclick="submitForm()"
+            >
+              Submit Report
+            </button>
+          </div>
+
+          <p id="msg" class="msg" aria-live="polite"></p>
+        </section>
+      </main>
+      <br>
+    </div>
+
+    <script>
+      const SCRIPT_URL =
+        "https://script.google.com/macros/s/AKfycbzLiVlQD_3iXzGJkNubDXY-2JoPnALcSoYUt_zy0NAKirwIUCe4e3EhxOA953a4wpsB/exec";
+
+      // auto date
+      document.getElementById("date").value = new Date()
+        .toISOString()
+        .split("T")[0];
+
+      function addItem() {
+        const div = document.createElement("div");
+        div.className = "equipment-card";
+
+        const index =
+          document.querySelectorAll("#equipmentList > div").length + 1;
+
+        div.innerHTML = `
+    <div class="equipment-header">
+      <p class="equipment-title">Equipment #${index}</p>
+      <button class="btn btn-danger" type="button" onclick="this.closest('.equipment-card').remove()">Remove</button>
+    </div>
+
+    <div class="grid">
+      <div class="field third">
+        <label>Equipment Type</label>
+        <input type="text" class="eq-type" placeholder="e.g., Router" autocomplete="off">
+      </div>
+      <div class="field third">
+        <label>Equipment ID</label>
+        <input type="text" class="eq-id" placeholder="e.g., EQ-001" autocomplete="off">
+      </div>
+      <div class="field third">
+        <label>Brand</label>
+        <input type="text" class="eq-make" placeholder="e.g., Cisco" autocomplete="off">
+      </div>
+      <div class="field third">
+        <label>Status</label>
+        <select class="eq-status">
+          <option value="">Select Status</option>
+          <option>Working</option>
+          <option>Not Working</option>
+          <option>Missing</option>
+          <option>Scraped</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Remarks</label>
+        <textarea class="eq-remarks" placeholder="Remarks"></textarea>
+      </div>
+    </div>
+  `;
+
+        document.getElementById("equipmentList").appendChild(div);
+      }
+
+      addItem(); // start with one
+
+      function submitForm() {
+        const btn = document.getElementById("submitBtn");
+        const msg = document.getElementById("msg");
+
+        msg.className = "msg";
+
+        const date = document.getElementById("date").value;
+        const empid = document.getElementById("empid").value;
+        const empname = document.getElementById("empname").value;
+        const site = document.getElementById("site").value;
+
+        if (!date || !empid || !empname || !site) {
+          msg.classList.add("error");
+          msg.innerText = "Fill all basic details.";
+          return;
+        }
+
+        const blocks = document.querySelectorAll("#equipmentList > div");
+
+        if (!blocks.length) {
+          msg.classList.add("error");
+          msg.innerText = "Add at least one equipment.";
+          return;
+        }
+
+        const items = [];
+
+        let hasInvalid = false;
+
+        blocks.forEach((div) => {
+          const item = {
+            type: div.querySelector(".eq-type").value,
+            eqid: div.querySelector(".eq-id").value,
+            make: div.querySelector(".eq-make").value,
+            status: div.querySelector(".eq-status").value,
+            remarks: div.querySelector(".eq-remarks").value,
+          };
+
+          if (!item.type || !item.eqid || !item.status) {
+            hasInvalid = true;
+          }
+
+          items.push(item);
+        });
+
+        if (hasInvalid) {
+          msg.classList.add("error");
+          msg.innerText =
+            "Fill all required equipment fields (Type, ID, Status).";
+          return;
+        }
+
+        sendData(items, date, empid, empname, site);
+      }
+
+      async function sendData(items, date, empid, empname, site) {
+        const btn = document.getElementById("submitBtn");
+        const msg = document.getElementById("msg");
+
+        msg.className = "msg";
+
+        btn.disabled = true;
+        btn.innerText = "Submitting...";
+
+        try {
+          const requests = items.map((item) => {
+            const formData = new FormData();
+
+            formData.append("date", date);
+            formData.append("empid", empid);
+            formData.append("empname", empname);
+            formData.append("site", site);
+
+            formData.append("type", item.type);
+            formData.append("eqid", item.eqid);
+            formData.append("make", item.make);
+            formData.append("status", item.status);
+            formData.append("remarks", item.remarks);
+
+            return fetch(SCRIPT_URL, {
+              method: "POST",
+              body: formData,
+            });
+          });
+
+          const results = await Promise.allSettled(requests);
+
+          const failed = results.filter((r) => r.status === "rejected");
+
+          if (failed.length > 0) throw new Error("Failed");
+
+          msg.classList.add("success");
+          msg.innerText = "Submitted successfully.";
+          document.getElementById("equipmentList").innerHTML = "";
+          addItem();
+        } catch (err) {
+          msg.classList.add("error");
+          msg.innerText = "Failed. Retrying...";
+          setTimeout(() => sendData(items, date, empid, empname, site), 2000);
+          return;
+        }
+
+        btn.disabled = false;
+        btn.innerText = "Submit Report";
+      }
+    
+    </script>
+  </body>
+</html>
