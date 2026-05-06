@@ -292,12 +292,30 @@
             </div>
             <div class="field half">
               <label for="site">Site Name</label>
-              <input
-                type="text"
-                id="site"
-                placeholder="Site Name"
-                autocomplete="organization"
-              />
+              <select id="site">
+                <option value="">— select your site —</option>
+                <option>Indutch Composite Technology Pvt Ltd, Waghodiya</option>
+                <option>Adani New Industries Ltd., Mundra</option>
+                <option>AMC-Senvion, Trichy</option>
+                <option>
+                  Envision Wind Power Technologies India Pvt Ltd, Trichy
+                </option>
+                <option>
+                  Envision Wind Power Technologies India Pvt Ltd, Mappeddu
+                </option>
+                <option>Indutch, Sullurpeta</option>
+                <option>L&amp;T, Coimbatore</option>
+                <option>L&amp;T, Dabaspet</option>
+                <option>GE Vernova, Halol</option>
+                <option>Suzlon Energy Limited, Anantapur</option>
+                <option>Suzlon Energy Limited, Jaisalmer</option>
+                <option>Suzlon Energy Limited, Ratlam</option>
+                <option>Suzlon Energy Limited, Bhuj</option>
+                <option>Vestas, Chennai</option>
+                <option>JSW Renew Energy Fifteen Limited, Halol</option>
+                <option>Vayona Energy Private Limited, Nellore</option>
+                <option>Other</option>
+              </select>
             </div>
           </div>
         </section>
@@ -324,7 +342,6 @@
           <p id="msg" class="msg" aria-live="polite"></p>
         </section>
       </main>
-      <br>
     </div>
 
     <script>
@@ -352,7 +369,28 @@
     <div class="grid">
       <div class="field third">
         <label>Equipment Type</label>
-        <input type="text" class="eq-type" placeholder="e.g., Router" autocomplete="off">
+        <select class="eq-type">
+          <option value="">— select type —</option>
+          <option>Sanding Machine</option>
+          <option>Angle Grinder</option>
+          <option>Battery Drill Machine</option>
+          <option>Anchoring/Drilling Machine</option>
+          <option>Straight Grinder Machine</option>
+          <option>Buffing Machine</option>
+          <option>Routing Machine</option>
+          <option>Impact Wrench</option>
+          <option>Hot Air Gun</option>
+          <option>Ring Spanner</option>
+          <option>Fix Spanner</option>
+          <option>Allen Key</option>
+          <option>Socket</option>
+          <option>Clamp Meter</option>
+          <option>Line Tester</option>
+          <option>Plier</option>
+          <option>Wire Stripper</option>
+          <option>Screwdriver</option>
+          <option>Other</option>
+        </select>
       </div>
       <div class="field third">
         <label>Equipment ID</label>
@@ -489,7 +527,6 @@
         btn.disabled = false;
         btn.innerText = "Submit Report";
       }
-    
     </script>
   </body>
 </html>
