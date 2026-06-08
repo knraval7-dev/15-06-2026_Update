@@ -303,6 +303,9 @@
                 <option>
                   Envision Wind Power Technologies India Pvt Ltd, Mappeddu
                 </option>
+                <option>
+                  Envision Wind Power Technologies India Pvt Ltd, Ahmedabad
+                </option>
                 <option>Indutch, Sullurpeta</option>
                 <option>L&amp;T, Coimbatore</option>
                 <option>L&amp;T, Dabaspet</option>
@@ -316,6 +319,15 @@
                 <option>Vayona Energy Private Limited, Nellore</option>
                 <option>Other</option>
               </select>
+            </div>
+            <div class="field half" id="siteOtherWrap" hidden>
+              <label for="siteOther">Other Site Name</label>
+              <input
+                type="text"
+                id="siteOther"
+                placeholder="Enter site name"
+                autocomplete="organization"
+              />
             </div>
           </div>
         </section>
@@ -346,12 +358,30 @@
 
     <script>
       const SCRIPT_URL =
-        "https://script.google.com/macros/s/AKfycbzLiVlQD_3iXzGJkNubDXY-2JoPnALcSoYUt_zy0NAKirwIUCe4e3EhxOA953a4wpsB/exec";
+        "https://script.google.com/macros/s/AKfycbyKQBUzE-eVuZGVZ6skjw0h7Oeekx3NuaDba9Ww9io1bzP8IAtdPKY7jceSunYXXHjK/exec";
 
       // auto date
       document.getElementById("date").value = new Date()
         .toISOString()
         .split("T")[0];
+
+      function toggleSiteOther() {
+        const siteSelect = document.getElementById("site");
+        const siteOtherWrap = document.getElementById("siteOtherWrap");
+        const siteOtherInput = document.getElementById("siteOther");
+        const isOther = siteSelect.value === "Other";
+
+        siteOtherWrap.hidden = !isOther;
+
+        if (!isOther) {
+          siteOtherInput.value = "";
+        }
+      }
+
+      document
+        .getElementById("site")
+        .addEventListener("change", toggleSiteOther);
+      toggleSiteOther();
 
       function addItem() {
         const div = document.createElement("div");
@@ -410,6 +440,18 @@
           <option>Scraped</option>
         </select>
       </div>
+      <div class="field third">
+        <label>UAN</label>
+        <select class="eq-uan">
+          <option value="">Select UAN</option>
+          <option>Nos</option>
+          <option>Set</option>
+        </select>
+      </div>
+      <div class="field third">
+        <label>Qty</label>
+        <input type="number" class="eq-qty" placeholder="e.g., 5" autocomplete="off" min="0">
+      </div>
       <div class="field">
         <label>Remarks</label>
         <textarea class="eq-remarks" placeholder="Remarks"></textarea>
@@ -431,9 +473,20 @@
         const date = document.getElementById("date").value;
         const empid = document.getElementById("empid").value;
         const empname = document.getElementById("empname").value;
-        const site = document.getElementById("site").value;
+        const siteSelectValue = document.getElementById("site").value;
+        const siteOtherValue = document
+          .getElementById("siteOther")
+          .value.trim();
+        const site =
+          siteSelectValue === "Other" ? siteOtherValue : siteSelectValue;
 
-        if (!date || !empid || !empname || !site) {
+        if (
+          !date ||
+          !empid ||
+          !empname ||
+          !siteSelectValue ||
+          (siteSelectValue === "Other" && !siteOtherValue)
+        ) {
           msg.classList.add("error");
           msg.innerText = "Fill all basic details.";
           return;
@@ -457,6 +510,8 @@
             eqid: div.querySelector(".eq-id").value,
             make: div.querySelector(".eq-make").value,
             status: div.querySelector(".eq-status").value,
+            uan: div.querySelector(".eq-uan").value,
+            qty: div.querySelector(".eq-qty").value,
             remarks: div.querySelector(".eq-remarks").value,
           };
 
@@ -499,6 +554,8 @@
             formData.append("eqid", item.eqid);
             formData.append("make", item.make);
             formData.append("status", item.status);
+            formData.append("uan", item.uan);
+            formData.append("qty", item.qty);
             formData.append("remarks", item.remarks);
 
             return fetch(SCRIPT_URL, {
